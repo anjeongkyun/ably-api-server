@@ -1,0 +1,22 @@
+version: "3"
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017"
+  app-test:
+    build:
+      context: .
+      dockerfile: Dockerfile-Test
+    depends_on:
+      - mongo
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src
+    environment:
+      PORT: 3000
+      DB_URL: mongodb://mongo:27017/test
+      NODE_ENV: test
+      SECRET_KEY: secretKey
+    entrypoint: npm run test
